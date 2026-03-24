@@ -1,0 +1,65 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+# from app.core.config import settings
+# from app.routers import books, healths, recommendations
+
+import uvicorn
+import logging
+
+import sys
+import os
+
+# 프로젝트 루트 경로를 찾아서 sys.path에 추가
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.join(current_dir, "..")
+sys.path.append(root_dir)
+
+from externals.whisper_cpp import whisper_processor 
+
+try:
+    result = whisper_processor.process_audio("./audio/wake_word_detected16k.wav", "small")
+    print(result)
+except Exception as e:
+    print(f"Error: {e}")
+    
+# # 로깅 설정
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+#     handlers=[
+#         logging.StreamHandler(),  # 콘솔에 출력
+#     ],
+# )
+
+# app = FastAPI()
+
+# origins = [
+#     "http://localhost",
+#     "http://localhost:8501",
+#     "http://127.0.0.1:8501",
+# ]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+# # 라우터 등록
+# # app.include_router(healths.router)
+
+
+# @app.get("/")
+# def root():
+#     return {
+#         "message": "Book Recommendation API",
+#         "version": settings.API_VERSION,
+#         "docs": "/docs",
+#     }
+
+
+# if __name__ == "__main__":
+#     uvicorn.run(app=app)

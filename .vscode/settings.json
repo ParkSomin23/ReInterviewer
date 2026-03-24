@@ -1,0 +1,5 @@
+{
+    "black-formatter.args": [
+        "{   \"python.formatting.provider\": \"black\",   \"editor.formatOnSave\": true,   \"black-formatter.args\": [     \"--force-exclude\",     \"/Users/somin/Desktop/github/ReInterviewer/externals/\"   ] }"
+    ]
+}
