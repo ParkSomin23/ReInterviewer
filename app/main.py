@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# from app.core.config import settings
-# from app.routers import books, healths, recommendations
+from app.core.config import settings
+from app.domains.audio import router as audio_router
+from app.domains.transcript import router as transcript_router
 
 import uvicorn
 import logging
@@ -15,13 +16,13 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, "..")
 sys.path.append(root_dir)
 
-from externals.whisper_cpp import whisper_processor 
+# from externals.whisper_cpp import whisper_processor 
 
-try:
-    result = whisper_processor.process_audio("./audio/wake_word_detected16k.wav", "small")
-    print(result)
-except Exception as e:
-    print(f"Error: {e}")
+# try:
+#     result = whisper_processor.process_audio("./audio/wake_word_detected16k.wav", "small")
+#     print(result)
+# except Exception as e:
+#     print(f"Error: {e}")
     
 # # 로깅 설정
 # logging.basicConfig(
@@ -32,7 +33,7 @@ except Exception as e:
 #     ],
 # )
 
-# app = FastAPI()
+app = FastAPI()
 
 # origins = [
 #     "http://localhost",
@@ -48,18 +49,19 @@ except Exception as e:
 #     allow_headers=["*"],
 # )
 
-# # 라우터 등록
-# # app.include_router(healths.router)
+# 라우터 등록
+app.include_router(audio_router.router)
+app.include_router(transcript_router.router)
 
 
-# @app.get("/")
-# def root():
-#     return {
-#         "message": "Book Recommendation API",
-#         "version": settings.API_VERSION,
-#         "docs": "/docs",
-#     }
+@app.get("/")
+def root():
+    return {
+        "message": "Book Recommendation API",
+        "version": settings.API_VERSION,
+        "docs": "/docs",
+    }
 
 
-# if __name__ == "__main__":
-#     uvicorn.run(app=app)
+if __name__ == "__main__":
+    uvicorn.run(app=app)

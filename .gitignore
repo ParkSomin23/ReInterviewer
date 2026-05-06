@@ -1,2 +1,11 @@
 externals/
 .vscode/
+.DS_Store
+.postman/
+__pycache__/
+
+*.wav
+*.mp3
+
+projects/
+postman/

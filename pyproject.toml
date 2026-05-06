@@ -9,5 +9,6 @@ dependencies = [
     "coremltools>=9.0",
     "fastapi>=0.135.2",
     "openai-whisper>=20250625",
+    "pydantic-settings>=2.13.1",
     "uvicorn[standard]>=0.42.0",
 ]
