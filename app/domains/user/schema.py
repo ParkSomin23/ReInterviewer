@@ -3,8 +3,9 @@ from typing import Optional, List
 
 from app.core.config import settings
 
+
 class UserBase(BaseModel):
-    
+
     user_id: int
     user_project: List = []
 

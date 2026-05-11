@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Optional
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
 
     root_path: Path = Path(__file__).resolve().parent.parent.parent
@@ -19,7 +20,6 @@ class Settings(BaseSettings):
 
     # text
     text_path: Path = proj_path / "texts"
-    
 
     # API 설정
     API_VERSION: str = "0.1.0"

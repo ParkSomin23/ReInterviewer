@@ -16,14 +16,14 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, "..")
 sys.path.append(root_dir)
 
-# from externals.whisper_cpp import whisper_processor 
+# from externals.whisper_cpp import whisper_processor
 
 # try:
 #     result = whisper_processor.process_audio("./audio/wake_word_detected16k.wav", "small")
 #     print(result)
 # except Exception as e:
 #     print(f"Error: {e}")
-    
+
 # # 로깅 설정
 # logging.basicConfig(
 #     level=logging.INFO,
