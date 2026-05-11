@@ -1,9 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.database import engine, Base
+from app import models
+
 from app.core.config import settings
+import app.core.health_router as health_router
 from app.domains.audio import router as audio_router
 from app.domains.transcript import router as transcript_router
+from app.domains.user import router as user_router
+from app.domains.project import router as proj_router
 
 import uvicorn
 import logging
@@ -33,6 +39,8 @@ sys.path.append(root_dir)
 #     ],
 # )
 
+models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
 # origins = [
@@ -50,16 +58,20 @@ app = FastAPI()
 # )
 
 # 라우터 등록
+app.include_router(health_router.router)
 app.include_router(audio_router.router)
 app.include_router(transcript_router.router)
+app.include_router(user_router.router)
+app.include_router(proj_router.router)
 
 
 @app.get("/")
 def root():
     return {
-        "message": "Book Recommendation API",
+        "message": "ReInterviewer API",
         "version": settings.API_VERSION,
         "docs": "/docs",
+        "message": "ReInterviewer API 서버가 작동 중입니다",
     }
 
 

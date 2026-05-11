@@ -4,8 +4,11 @@ externals/
 .postman/
 __pycache__/
 
+*.db
 *.wav
 *.mp3
+
+app/core/config.py
 
 projects/
 postman/
