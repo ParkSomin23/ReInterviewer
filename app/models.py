@@ -1,4 +1,6 @@
 import uuid
+from nanoid import generate
+
 from sqlalchemy import Column, String, DateTime, Text, ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -10,7 +12,7 @@ class User(Base):
     __tablename__ = "users"
 
     # 고유 ID (UUID 문자열)
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
 
     # 사용자 정보
     email = Column(String, unique=True, index=True, nullable=False)
@@ -32,7 +34,10 @@ class Interview(Base):
     __tablename__ = "interviews"
 
     # SQLite는 UUID 타입을 지원하지 않으므로 String으로 저장하고 기본값을 uuid4로 줍니다.
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    slug = Column(
+        String(12), unique=True, index=True, default=lambda: generate(size=12)
+    )
 
     company_name = Column(String, nullable=False)
     position = Column(String)

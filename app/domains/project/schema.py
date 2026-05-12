@@ -18,7 +18,7 @@ class InterviewCreate(BaseModel):
 
 class InterviewResponse(BaseModel):
 
-    id: UUID
+    slug: str
 
     company_name: str
     position: str

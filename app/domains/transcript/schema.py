@@ -32,7 +32,9 @@ class STTResponse(BaseModel):
     texts: List[str] = Field(
         None,
         title="오디오 전사 내용",
-        json_schema_extra={"examples": ["오디오 내용을 텍스트롤 내보냅니다.", "다음 문장입니다."]},
+        json_schema_extra={
+            "examples": ["오디오 내용을 텍스트롤 내보냅니다.", "다음 문장입니다."]
+        },
     )
 
     timestamps: List[Tuple[float, float]] = Field(
@@ -42,4 +44,6 @@ class STTResponse(BaseModel):
         examples=[(1.03, 2.07), (3.013, 4.92)],
     )
 
-    speakers: List[int] = Field(None, title="다화자 id 저장", description="오디오에서 말하는 화자 확인")
+    speakers: List[int] = Field(
+        None, title="다화자 id 저장", description="오디오에서 말하는 화자 확인"
+    )

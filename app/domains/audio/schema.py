@@ -53,7 +53,7 @@ class AudioBase(BaseModel):
 
 class AudioProcessRequest(BaseModel):
 
-    ori_audio_path: str = Field(
+    ori_audio_path: Path = Field(
         ...,
         title="입력 받은 오디오 경로",
         description="원본 오디오 파일의 경로입니다. 절대 경로를 직접 입력하거나, \
@@ -85,7 +85,9 @@ class AudioProcessResponse(BaseModel):
         title="입력 받은 오디오 경로",
         description="reample된 오디오 파일의 경로입니다. 절대 경로를 받아옵니다.",
         json_schema_extra={
-            "examples": ["/Users/AAA/Desktop/ReInterviewer/projects/0000/audios/tmp_0001_resampled.wav"]
+            "examples": [
+                "/Users/AAA/Desktop/ReInterviewer/projects/0000/audios/tmp_0001_resampled.wav"
+            ]
         },
     )
 

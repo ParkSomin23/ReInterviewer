@@ -1,7 +1,11 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Annotated, Tuple
 
-from app.domains.audio.schema import AudioBase, AudioProcessRequest, AudioProcessResponse
+from app.domains.audio.schema import (
+    AudioBase,
+    AudioProcessRequest,
+    AudioProcessResponse,
+)
 
 import os
 import subprocess
@@ -22,9 +26,13 @@ class AudioService:
 
         ext = os.path.splitext(request.ori_audio_path)[1]
 
-        resampled_audio_path = request.ori_audio_path.replace(ext, "_resampled" + ext)
+        resampled_audio_path = str(request.ori_audio_path).replace(
+            ext, "_resampled" + ext
+        )
         if os.path.isfile(resampled_audio_path):
-            return AudioProcessResponse(status="success", resampled_audio_path=resampled_audio_path)
+            return AudioProcessResponse(
+                status="success", resampled_audio_path=resampled_audio_path
+            )
 
         # 1. Denosing
 
@@ -50,7 +58,9 @@ class AudioService:
         ]
         subprocess.run(command, check=True)
 
-        return AudioProcessResponse(status="success", resampled_audio_path=resampled_audio_path)
+        return AudioProcessResponse(
+            status="success", resampled_audio_path=resampled_audio_path
+        )
 
     # def resample_audio(self, request: AudioProcessRequest):
 
