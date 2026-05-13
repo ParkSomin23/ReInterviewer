@@ -1,7 +1,7 @@
 import uuid
 from nanoid import generate
 
-from sqlalchemy import Column, String, DateTime, Text, ForeignKey
+from sqlalchemy import Column, String, DateTime, Text, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -23,8 +23,7 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.now)
     last_login = Column(DateTime, nullable=True)
 
-    # 관계 설정: 한 사용자는 여러 개의 인터뷰를 가질 수 있음
-    # back_populates는 Interview 모델에도 'owner'라는 필드가 있어야 함을 의미합니다.
+    # 관계 설정
     interviews = relationship(
         "Interview", back_populates="owner", cascade="all, delete-orphan"
     )
@@ -33,7 +32,6 @@ class User(Base):
 class Interview(Base):
     __tablename__ = "interviews"
 
-    # SQLite는 UUID 타입을 지원하지 않으므로 String으로 저장하고 기본값을 uuid4로 줍니다.
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     slug = Column(
         String(12), unique=True, index=True, default=lambda: generate(size=12)
@@ -51,3 +49,24 @@ class Interview(Base):
 
     user_id = Column(String, ForeignKey("users.id"))
     owner = relationship("User", back_populates="interviews")
+
+    messages = relationship(
+        "Message", back_populates="interview", cascade="all, delete-orphan"
+    )
+
+
+class Message(Base):
+    __tablename__ = "messages"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    interview_slug = Column(String(12), ForeignKey("interviews.slug"), index=True)
+
+    role = Column(String(10))  # "user" or "assistant"
+
+    content = Column(Text)
+    audio_path = Column(String(255), nullable=True)
+
+    created_at = Column(DateTime, default=datetime.now)
+    modified_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+
+    interview = relationship("Interview", back_populates="messages")

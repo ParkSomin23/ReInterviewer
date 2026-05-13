@@ -6,11 +6,21 @@ from pathlib import Path
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Annotated, Tuple
 
-from app.domains.transcript.schema import STTRequest, STTResponse
+from sqlalchemy.orm import Session
+from sqlalchemy import or_
+
+from app.domains.transcript.schema import (
+    STTRequest,
+    STTResponse,
+    MessageRequest,
+    MessageResponse,
+)
 from app.core.config import settings
 
+from app.models import Message
 
-class STTService:
+
+class TranscriptService:
 
     def __init__(
         self,
@@ -22,7 +32,10 @@ class STTService:
         self.stt_model = settings.stt_model
         if self.stt_model == "whisper":
             self.model_name = settings.whisper_version
-            self.model_path = self.root_path / f"""externals/whisper_cpp/models/ggml-{self.model_name}.bin"""
+            self.model_path = (
+                self.root_path
+                / f"""externals/whisper_cpp/models/ggml-{self.model_name}.bin"""
+            )
 
             self.external_path = settings.whisper_cli_path
 
@@ -38,9 +51,17 @@ class STTService:
         # Check if STT result file exists
         output_json_name = text_path / request.resampled_audio_path.stem
         if output_json_name.with_suffix(".json").exists():
-            texts, timestamps, speakers = self.json_to_response(output_json_name.with_suffix(".json"))
+            texts, timestamps, speakers = self.json_to_response(
+                output_json_name.with_suffix(".json")
+            )
 
-            return STTResponse(status="success", texts=texts, timestamps=timestamps, speakers=speakers)
+            return STTResponse(
+                status="success",
+                texts=texts,
+                audio_file=request.resampled_audio_path.name,
+                timestamps=timestamps,
+                speakers=speakers,
+            )
 
         # see "externals/whisper_cpp/examples/cli/README.md" for more options
         command = [
@@ -55,7 +76,9 @@ class STTService:
             "-of",
             output_json_name,  # output name
         ]
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = subprocess.Popen(
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
 
         # Get the output and error (if any)
         _, error = process.communicate()
@@ -64,11 +87,19 @@ class STTService:
             raise Exception(f"""Error processing audio: {error.decode('utf-8')}""")
 
         if self.stt_model == "whisper":
-            texts, timestamps, speakers = self.json_to_response(output_json_name.with_suffix(".json"))
+            texts, timestamps, speakers = self.json_to_response(
+                output_json_name.with_suffix(".json")
+            )
         else:
             raise NotImplementedError(f"{self.stt_model} is not impletmented")
 
-        return STTResponse(status="success", texts=texts, timestamps=timestamps, speakers=speakers)
+        return STTResponse(
+            status="success",
+            texts=texts,
+            audio_file=request.resampled_audio_path.name,
+            timestamps=timestamps,
+            speakers=speakers,
+        )
 
     def json_to_response(self, json_path):
         """
@@ -99,3 +130,33 @@ class STTService:
             speakers.append(-1)
 
         return texts, timestamps, speakers
+
+    def create_message(self, request: MessageRequest, db: Session):
+
+        msg = Message(**request.model_dump())
+
+        db.add(msg)
+        db.commit()
+        db.refresh(msg)
+
+        return msg
+
+    def update_message(self, message_id: int, text: str, db: Session):
+
+        msg = db.query(Message).filter_by(id=message_id).first()
+        if not msg:
+            raise ValueError(f"message가 DB에 없습니다.: {message_id}\n{text}")
+
+        msg.content = text
+
+        db.commit()
+        db.refresh(msg)
+
+        return msg
+
+    def delete_message(self, message_id: int, db: Session):
+
+        msg = db.query(Message).filter(Message.id == message_id).first()
+        if msg:
+            db.delete(msg)
+            db.commit()
