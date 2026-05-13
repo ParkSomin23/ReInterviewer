@@ -160,3 +160,12 @@ class TranscriptService:
         if msg:
             db.delete(msg)
             db.commit()
+
+    def get_messages_by_interview(self, interview_slug: str, db: Session):
+
+        return (
+            db.query(Message)
+            .filter_by(interview_slug=interview_slug)
+            .order_by(Message.created_at.asc())
+            .all()
+        )

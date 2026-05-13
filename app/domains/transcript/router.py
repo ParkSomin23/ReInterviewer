@@ -37,6 +37,16 @@ def create_message(
     return response
 
 
+@router.get("/{interview_slug}", response_model=list[MessageResponse])
+def get_all_message(
+    interview_slug: str,
+    service: TranscriptService = Depends(get_transcript_service),
+    db=Depends(get_db),
+):
+
+    return service.get_messages_by_interview(interview_slug, db)
+
+
 @router.patch("/{message_id}", response_model=MessageResponse)
 def update_message(
     message_id: int,
