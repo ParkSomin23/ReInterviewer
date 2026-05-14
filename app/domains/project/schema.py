@@ -11,9 +11,9 @@ class InterviewCreate(BaseModel):
 
     company_name: str
     position: str
-
     interview_date: datetime
-    created_at: datetime = Field(default_factory=datetime.now)
+
+    model_config = {"from_attributes": True}
 
 
 class InterviewResponse(BaseModel):

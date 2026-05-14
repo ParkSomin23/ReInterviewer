@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 from sqlalchemy.orm import Session
 
@@ -31,6 +32,31 @@ def create_user_interview(db: Session, interview_data: InterviewCreate, user_id:
     text_path.mkdir()
 
     return db_interview
+
+
+def delete_user_interview(db: Session, interview_slug: str, user_id: str):
+
+    db_interview = (
+        db.query(Interview)
+        .filter(
+            Interview.slug == interview_slug,
+            Interview.user_id == user_id,  # 본인 소유인지 확인
+        )
+        .first()
+    )
+    proj_path = Path(settings.proj_path) / db_interview.slug
+
+    if not db_interview:
+        raise HTTPException(
+            status_code=404, detail=f"Interview not found: {interview_slug}"
+        )
+
+    db.delete(db_interview)
+    db.commit()
+
+    # 폴더 삭제
+    if proj_path.exists():
+        shutil.rmtree(proj_path)
 
 
 def get_my_interviews(db: Session, user_id: str):

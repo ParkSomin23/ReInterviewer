@@ -64,7 +64,7 @@ def main():
     # ➕ 새 면접 시작 버튼
     if st.button("➕ 새 면접 복기 시작하기", use_container_width=True):
         st.session_state.interview_id = None
-        st.switch_page("streamlit_views/projects/interview.py")
+        st.switch_page("streamlit_views/create_interview.py")
 
     st.divider()
 

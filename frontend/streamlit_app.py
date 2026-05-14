@@ -18,7 +18,11 @@ def main():
         "streamlit_views/projects/interview.py", title="새 면접 복기", icon="🎙️"
     )
 
-    pg = st.navigation([dash_page, intv_page], position="hidden")
+    create_page = st.Page(
+        "streamlit_views/create_interview.py", title="새 면접 복기", icon="🎙️"
+    )
+
+    pg = st.navigation([dash_page, create_page, intv_page], position="hidden")
     pg.run()
 
 

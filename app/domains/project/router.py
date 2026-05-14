@@ -37,7 +37,7 @@ def get_interview_detail(
     return interview
 
 
-@router.post("/create", response_model=InterviewResponse)
+@router.post("", response_model=InterviewResponse)
 def create_interview(
     interview_data: InterviewCreate,
     db: Session = Depends(get_db),
@@ -47,7 +47,18 @@ def create_interview(
     return interview_service.create_user_interview(db, interview_data, current_user_id)
 
 
-@router.get("/", response_model=list[InterviewResponse])
+@router.delete("/{interview_slug}", status_code=204)
+def delete_interview(
+    interview_slug: str,
+    db: Session = Depends(get_db),
+    current_user_id: str = Depends(get_current_user_id),
+):
+    interview_service.delete_user_interview(db, interview_slug, current_user_id)
+
+    return None
+
+
+@router.get("", response_model=list[InterviewResponse])
 def get_my_interviews(
     current_user_id: str = Depends(
         get_current_user_id
