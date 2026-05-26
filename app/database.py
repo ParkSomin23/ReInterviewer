@@ -8,7 +8,7 @@ from app.core.config import settings
 
 # 1. DB 파일 경로 설정
 # sqlite:/// 뒤의 ./는 현재 위치를 의미하며 interview_app.db라는 파일이 생성됩니다.
-SQLALCHEMY_DATABASE_URL = settings.db_url
+SQLALCHEMY_DATABASE_URL = settings.DB_URL
 
 
 # 2. 엔진 생성

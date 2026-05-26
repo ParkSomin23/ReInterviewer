@@ -6,7 +6,7 @@ from pathlib import Path
 
 from app.core.config import settings
 
-PROJ_PATH = settings.proj_path
+PROJ_PATH = settings.PROJ_PATH
 
 
 class STTRequest(BaseModel):

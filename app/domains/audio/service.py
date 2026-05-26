@@ -13,9 +13,7 @@ import subprocess
 
 class AudioService:
 
-    def __init__(
-        self,
-    ):
+    def __init__(self):
 
         self.hello = None
 
