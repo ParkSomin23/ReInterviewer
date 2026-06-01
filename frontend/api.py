@@ -11,8 +11,8 @@ from app.domains.transcript.schema import MessageRequest, MessageResponse
 from app.domains.project.schema import InterviewResponse, InterviewCreate
 from app.domains.transcript.schema import STTRequest, STTResponse
 
-API_BASE_URL = "http://localhost:8000"
-PROJ_PATH = settings.proj_path
+API_BASE_URL = "http://127.0.0.1:8000"
+PROJ_PATH = settings.PROJ_PATH
 
 
 # =========== INTERVIEWS ===========
@@ -121,7 +121,7 @@ def edit_msg(message_id: int, msg: dict) -> MessageResponse:
             {msg['content']}\n{e}""")
 
 
-@st.cache_data
+# @st.cache_data
 def get_all_msg(interview_slug_id: str):
 
     try:
@@ -164,7 +164,7 @@ def preprocess_audio(
     try:
         audio_name = generate(size=15) + ".wav"
         audio_path = (
-            Path(settings.proj_path) / interview_slug_id / "audios" / audio_name
+            Path(settings.PROJ_PATH) / interview_slug_id / "audios" / audio_name
         )
 
         if audio_byte:

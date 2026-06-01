@@ -14,12 +14,13 @@ def main():
     dash_page = st.Page(
         "streamlit_views/dashboard.py", title="내 면접 목록", icon="📊", default=True
     )
+
     intv_page = st.Page(
         "streamlit_views/projects/interview.py", title="새 면접 복기", icon="🎙️"
     )
 
     create_page = st.Page(
-        "streamlit_views/create_interview.py", title="새 면접 복기", icon="🎙️"
+        "streamlit_views/create_interview.py", title="면접 정보 입력", icon="🎙️"
     )
 
     pg = st.navigation([dash_page, create_page, intv_page], position="hidden")

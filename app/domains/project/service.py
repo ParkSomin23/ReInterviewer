@@ -20,7 +20,7 @@ def create_user_interview(db: Session, interview_data: InterviewCreate, user_id:
     db.refresh(db_interview)
 
     # 폴더 생성
-    proj_path = Path(settings.proj_path) / db_interview.slug
+    proj_path = Path(settings.PROJ_PATH) / db_interview.slug
     if proj_path.exists():
         raise FileExistsError("Interview가 존재합니다. 생성할 수 없습니다.")
 
@@ -34,6 +34,21 @@ def create_user_interview(db: Session, interview_data: InterviewCreate, user_id:
     return db_interview
 
 
+# TODO: 나중에 정보 수정하기 넣기
+# def edit_user_interview(db: Session, interview_data: InterviewCreate, user_id: str):
+
+#     db_interview = (
+#         db.query(Interview)
+#         .filter(
+#             Interview.slug == interview_data["slug"],
+#             Interview.user_id == user_id,  # 본인 소유인지 확인
+#         )
+#         .first()
+#     )
+
+#     return db_interview
+
+
 def delete_user_interview(db: Session, interview_slug: str, user_id: str):
 
     db_interview = (
@@ -44,7 +59,7 @@ def delete_user_interview(db: Session, interview_slug: str, user_id: str):
         )
         .first()
     )
-    proj_path = Path(settings.proj_path) / db_interview.slug
+    proj_path = Path(settings.PROJ_PATH) / db_interview.slug
 
     if not db_interview:
         raise HTTPException(

@@ -26,18 +26,18 @@ class TranscriptService:
         self,
     ):
 
-        self.root_path = settings.root_path
-        self.proj_path = settings.proj_path
+        self.root_path = settings.ROOT_PATH
+        self.proj_path = settings.PROJ_PATH
 
-        self.stt_model = settings.stt_model
+        self.stt_model = settings.STT_MODEL
         if self.stt_model == "whisper":
-            self.model_name = settings.whisper_version
+            self.model_name = settings.WHISPER_VERSION
             self.model_path = (
                 self.root_path
                 / f"""externals/whisper_cpp/models/ggml-{self.model_name}.bin"""
             )
 
-            self.external_path = settings.whisper_cli_path
+            self.external_path = settings.WHISPER_CLI_PATH
 
     def stt(self, request: STTRequest):
 

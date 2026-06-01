@@ -64,10 +64,10 @@ class AudioService:
 
     #     # check if audio is already resampled
     #     if request.resampled_audio_path is not None:
-    #         resampled_audio_path = os.path.join(settings.proj_path, request.resampled_audio_path)
+    #         resampled_audio_path = os.path.join(settings.PROJ_PATH, request.resampled_audio_path)
     #         subprocess.Popen(f"""ffmpeg -i {resampled_audio_path} 2>&1 | grep -A1 Duration:""")
 
-    #     ori_audio_path = os.path.join(settings.proj_path, request.ori_audio_path)
+    #     ori_audio_path = os.path.join(settings.PROJ_PATH, request.ori_audio_path)
 
     #     if not os.path.isfile(ori_audio_path):
     #         raise FileNotFoundError(f"""Cannot find file: {ori_audio_path}""")

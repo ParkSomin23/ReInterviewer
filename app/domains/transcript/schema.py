@@ -26,32 +26,35 @@ class STTRequest(BaseModel):
 
 
 class STTResponse(BaseModel):
+    # Optional로 타입을 명시하고, json_schema_extra 대신 v2 전용 examples 필드를 사용합니다.
+    status: Optional[str] = Field(default=None, examples=["success", "fail"])
 
-    status: str = Field(None, json_schema_extra={"examples": ["success", "fail"]})
-
-    audio_file: Path = Field(
-        None,
+    audio_file: Optional[Path] = Field(
+        default=None,
         title="입력된 오디오 파일 이름",
-        json_schema_extra={"examples": "3284ner21314_resampled.wav"},
+        examples=["3284ner21314_resampled.wav"],
     )
 
-    texts: List[str] = Field(
-        None,
+    texts: Optional[List[str]] = Field(
+        default=None,
         title="오디오 전사 내용",
-        json_schema_extra={
-            "examples": ["오디오 내용을 텍스트롤 내보냅니다.", "다음 문장입니다."]
-        },
+        # 리스트 자체의 예시이므로 이 형태가 올바릅니다.
+        examples=[["오디오 내용을 텍스트로 내보냅니다.", "다음 문장입니다."]],
     )
 
-    timestamps: List[Tuple[float, float]] = Field(
-        None,
+    timestamps: Optional[List[Tuple[float, float]]] = Field(
+        default=None,
         title="timestamps",
         description="각 text 시작과 끝 초(s)를 저장합니다.",
-        examples=[(1.03, 2.07), (3.013, 4.92)],
+        # 튜플() 대신 JSON 표준인 배열[ ] 구조로 예시를 작성해야 에러가 안 납니다!
+        examples=[[[1.03, 2.07], [3.013, 4.92]]],
     )
 
-    speakers: List[int] = Field(
-        None, title="다화자 id 저장", description="오디오에서 말하는 화자 확인"
+    speakers: Optional[List[int]] = Field(
+        default=None,
+        title="다화자 id 저장",
+        description="오디오에서 말하는 화자 확인",
+        examples=[[0, 1, 0]],
     )
 
 

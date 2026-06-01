@@ -14,8 +14,6 @@ def fetch_interview_list() -> list[InterviewResponse]:
         response = requests.get(f"{API_BASE_URL}/projects")
         response.raise_for_status()
 
-        print(response.json())
-
         return response.json()
 
     except Exception as e:
@@ -85,28 +83,31 @@ def main():
     with col4:
         st.write(f"**프로젝트**")
 
-    for item in interview_list:
+    if len(interview_list) != 0:
 
-        with col1:
-            st.write(item["company_name"])
+        for item in interview_list:
 
-        with col2:
-            interview_date, interview_time = item["interview_date"].split("T")
-            interview_time = interview_time[:-3]
-            st.write(f"""{interview_date}\t{interview_time}""")
+            with col1:
+                st.write(item["company_name"])
 
-        with col3:
-            created_date, created_time = item["created_at"].split("T")
-            created_time = created_time.split(".")[0]
-            st.write(f"""{created_date}\t{created_time}""")
+            with col2:
+                interview_date, interview_time = item["interview_date"].split("T")
+                interview_time = interview_time[:-3]
+                st.write(f"""{interview_date}\t{interview_time}""")
 
-        with col4:
-            if st.button("보기", key=f"btn_{item['slug']}"):
-                # st.query_params.interview_id = item["id"]
-                st.session_state.interview_slug = item["slug"]
-                st.switch_page("streamlit_views/projects/interview.py")
+            with col3:
+                created_date, created_time = item["created_at"].split("T")
+                created_time = created_time.split(".")[0]
+                st.write(f"""{created_date}\t{created_time}""")
+
+            with col4:
+                if st.button("보기", key=f"btn_{item['slug']}"):
+                    # st.query_params.interview_id = item["id"]
+                    st.session_state.interview_slug = item["slug"]
+                    st.switch_page("streamlit_views/projects/interview.py")
 
 
 if __name__ == "__main__":
+
     style()
     main()

@@ -16,7 +16,7 @@ SQLALCHEMY_DATABASE_URL = settings.DB_URL
 @st.cache_resource
 def get_db_engine():
     return create_engine(
-        SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}, echo=True
+        SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}, echo=False
     )
 
 

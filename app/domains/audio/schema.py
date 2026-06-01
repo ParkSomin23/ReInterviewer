@@ -38,7 +38,7 @@ class AudioBase(BaseModel):
     @classmethod
     def join_with_base_path(cls, v: str) -> Path:
 
-        PROJ_PATH = settings.proj_path
+        PROJ_PATH = settings.PROJ_PATH
         if os.path.isabs(v):
             return v
 
