@@ -10,6 +10,7 @@ from app.domains.audio import router as audio_router
 from app.domains.transcript import router as transcript_router
 from app.domains.user import router as user_router
 from app.domains.project import router as proj_router
+from app.domains.llm import router as llm_router
 
 import uvicorn
 import logging
@@ -63,6 +64,7 @@ app.include_router(audio_router.router)
 app.include_router(transcript_router.router)
 app.include_router(user_router.router)
 app.include_router(proj_router.router)
+app.include_router(llm_router.router)
 
 
 @app.get("/")

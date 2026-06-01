@@ -218,3 +218,20 @@ def stt(interview_slug_id: str, audio_byte: Optional[bytes]) -> STTResponse:
     msg = transcript(msg["resampled_audio_path"])
 
     return msg
+
+
+# =========== CHAT & LLM ===========
+def generate_chat_tmp(request: list[MessageResponse]) -> str:
+    try:
+
+        response = requests.post(
+            f"{API_BASE_URL}/llm/chat",
+            json=request,
+        )
+        response.raise_for_status()
+
+        return response.json()
+
+    except Exception as e:
+        st.error(f"질문 생성 중 문제가 발생했습니다: {e}")
+        return None

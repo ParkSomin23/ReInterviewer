@@ -9,6 +9,7 @@ dependencies = [
     "coremltools>=9.0",
     "fastapi>=0.135.2",
     "nanoid>=2.0.0",
+    "ollama>=0.6.2",
     "openai-whisper>=20250625",
     "passlib[bcrypt]>=1.7.4",
     "pydantic-settings>=2.13.1",
@@ -18,4 +19,6 @@ dependencies = [
     "streamlit>=1.57.0",
     "streamlit-mic-recorder>=0.0.8",
     "uvicorn[standard]>=0.42.0",
+    "wandb>=0.25.0",
+    "weave>=0.52.40",
 ]
